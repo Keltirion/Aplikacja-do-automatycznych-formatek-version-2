@@ -1,4 +1,3 @@
-import sys
 from Functions import *
 from PyQt5.QtWidgets import (QWidget, QPushButton, QVBoxLayout,
                              QApplication,
