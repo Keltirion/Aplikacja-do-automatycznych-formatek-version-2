@@ -12,7 +12,9 @@ xl_sheet = xl_workbook.sheet_by_name('Sheet1')
 xl_rows = xl_sheet.nrows
 
 # Attachment for email
-attachment = 'C:/Users/lel.dva/Documents/PYTHON/Aplikacja-do-automatycznych-formatekv2/Resources/VELFAC Direct - Reporting Damage Policy.pdf'
+path = os.getcwd()
+attachment = '\\Resources\VELFAC Direct - Reporting Damage Policy.pdf'
+full_path = '{}{}'.format(path, attachment)
 
 # Function for clearing the data from unnecessary informations.
 start = 'Do you want to start creating emails? There will be ' + str(xl_rows) + ' emails.'
@@ -47,12 +49,14 @@ class Emailer:
         self.recipient = recipient
         self.subject = subject
         self.body = body
-        self.attachment = attachment
+        self.attachment = full_path
 
     # Creates an email within outlook. Three parameters mus be given.
     # Subject, recipient and body.
 
     def create(self):
+        print(full_path)
+        print(path)
         outlook = win32.Dispatch('outlook.application')
         email = outlook.CreateItem(0)
         email.To = self.recipient
