@@ -126,4 +126,5 @@ dmypy.json
 .vscode
 
 # Other
+.idea
 Resources/

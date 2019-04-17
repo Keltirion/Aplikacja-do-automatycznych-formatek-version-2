@@ -1,6 +1,5 @@
 import datetime, xlrd, sys, os
 import win32com.client as win32
-import pythoncom
 
 data_list = []
 # External files. They must have the same name as given in the code.

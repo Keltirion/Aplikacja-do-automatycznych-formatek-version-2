@@ -1,8 +1,9 @@
+import pythoncom
 from Functions import *
+from PyQt5.QtCore import (QThreadPool, QRunnable)
 from PyQt5.QtWidgets import (QWidget, QPushButton, QVBoxLayout,
-                             QApplication,
+                             QApplication, QDesktopWidget,
                              QHBoxLayout, QLabel)
-from PyQt5.QtCore import QThreadPool, QRunnable
 
 
 class Worker(QRunnable):
@@ -14,6 +15,7 @@ class Worker(QRunnable):
     def run(self):
         pythoncom.CoInitialize()
         self.processStart.create()
+
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -52,6 +54,11 @@ class MainWindow(QWidget):
         self.btn.clicked.connect(self.windowclose)
 
         self.setLayout(self.vbox)
+
+        frame = self.frameGeometry()
+        center = QDesktopWidget().availableGeometry().center()
+        frame.moveCenter(center)
+        self.move(frame.topLeft())
         self.show()
 
     def preparation(self):
@@ -77,6 +84,9 @@ class SecondWindow(QWidget):
         self.hbox2 = QHBoxLayout()
         self.vbox = QVBoxLayout()
 
+        self.process = Worker()
+        self.threadpool = QThreadPool()
+        self.lastwindow = ThirdWindow()
 
     def initui(self):
         self.hbox.addStretch()
@@ -94,9 +104,12 @@ class SecondWindow(QWidget):
         self.vbox.addStretch()
         self.btn1.clicked.connect(self.createemails)
         self.btn2.clicked.connect(self.windowclose)
-        self.process = Worker()
-        self.threadpool = QThreadPool()
-
+                
+        frame = self.frameGeometry()
+        center = QDesktopWidget().availableGeometry().center()
+        frame.moveCenter(center)
+        
+        self.move(frame.topLeft())
         self.setLayout(self.vbox)
         self.show()
 
@@ -105,6 +118,8 @@ class SecondWindow(QWidget):
 
     def createemails(self):
         self.threadpool.start(self.process)
+        self.hide()
+        self.lastwindow.initui()
 
 class ThirdWindow(QWidget):
     def __init__(self):
@@ -121,11 +136,18 @@ class ThirdWindow(QWidget):
         self.vbox.addWidget(self.btn)
         self.vbox.addStretch()
 
+        self.btn.clicked.connect(self.closeapp)
+        
+        frame = self.frameGeometry()
+        center = QDesktopWidget().availableGeometry().center()
+        frame.moveCenter(center)
+        
+        self.move(frame.topLeft())
         self.setLayout(self.vbox)
         self.show()
 
     def closeapp(self):
-        pass
+        self.close()
 
 
 
